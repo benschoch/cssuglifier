@@ -4,6 +4,7 @@
 > By default this plugin preserves class name suffixes so it can be used for easier handling BEM style modifiers.
 
 > Example input:
+
 ```css
 .block {
     display: block;
@@ -24,6 +25,7 @@
 ```
 
 > Example output:
+
 ```css
 .b5 {
     display: block;

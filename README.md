@@ -1,6 +1,7 @@
 # grunt-cssuglifier
 
-> The best Grunt plugin ever.
+> This plugin minifies the CSS class names in a given CSS file.
+> Currently this is only working for
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -90,12 +91,29 @@ The target for saving the uglified CSS files.
 If this is empty the source files will be *overwritten*.
 Subdirectories from the source folder will be preserved.
 
-
 #### options.keepBemModifier
 Type: `Bool`
 Default value: `true`
 
 This is for BEM class name usage but actually you can define any kind of suffix that will be preserved if found at the end of a class name.
+
+#### options.classPrefix
+Type: `String`
+Default value: `'\\.'`
+
+If you prefer to use the script for something else than classes (for example IDs) this is what you have to change.
+Please note the *double* backslash in front of the dot in the default value. As this string will be passed to RegExp, it has to be escaped.
+
+An example usage to replace class names & IDs:
+```
+...
+options: {
+  ...
+  'classPrefix': '[\\.#]+'
+  ...
+}
+...
+```
 
 #### options.bemModifierPrefix
 Type: `String`
@@ -110,9 +128,13 @@ Default value: `true`
 This will create a JSON file that contains an object with the mapping of the transformed class names.
 The format is:
 ```
-{
+...
+options: {
+  ...
   'actualLongClassName': 'ugly'
+  ...
 }
+...
 ```
 
 #### options.jsonMapFilePath

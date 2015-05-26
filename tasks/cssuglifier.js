@@ -16,6 +16,8 @@ module.exports = function (grunt) {
 
   grunt.registerMultiTask('cssuglifier', 'The best Grunt plugin ever.', function () {
     var defaultOptions = {
+      classPrefixRegex: '\\.',
+      classPrefix: '\\.',
       keepBemModifier: 1,
       bemModifierPrefix: '--',
 
@@ -36,7 +38,7 @@ module.exports = function (grunt) {
     var options = this.options(defaultOptions);
 
     var srcFiles = [];
-    this.files.forEach(function (file, i) {
+    this.files.forEach(function (file) {
       var addFiles = file.src.filter(function (filepath) {
         if (!grunt.file.exists(filepath)) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
@@ -87,7 +89,9 @@ module.exports = function (grunt) {
 
       var fileContent = grunt.file.read(src);
 
-      var result = fileContent.replace(/(\.[^\s,\{\[:\d][^\s,\{\[:]+)/g, function (className, p1, offset) {
+      var regexStr = '(' + options.classPrefix + ')([^\\s,\\{\\[:\\d]+[^\\s,\\{\\[:]+)';
+      var regex = new RegExp(regexStr, 'g');
+      var result = fileContent.replace(regex, function (className, prefix) {
         className = sanitizeClassName(className);
         var suffix = '';
         if (options.keepBemModifier && className.indexOf(options.bemModifierPrefix)) {
@@ -104,7 +108,7 @@ module.exports = function (grunt) {
           anonymizedClassName = uniqueAnonymizedName(className, mapped);
           mapped[className] = anonymizedClassName;
         }
-        anonymizedClassName = '.' + anonymizedClassName + suffix;
+        anonymizedClassName = prefix + anonymizedClassName + suffix;
         return anonymizedClassName;
       });
 
@@ -130,7 +134,7 @@ module.exports = function (grunt) {
     name = md5(name);
     name = name.substring(0, strLen);
     if (name.match(/^\d+.*$/)) {
-      name = name.replace(/^(\d{1})(.*)$/, function (n, p1, p2, offset, str) {
+      name = name.replace(/^(\d{1})(.*)$/, function (n, p1, p2) {
         return 'abcdefghijklmnopqrstuvwxyz'.charAt(p1) + '' + p2;
       });
     }

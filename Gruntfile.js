@@ -18,12 +18,10 @@ module.exports = function (grunt) {
     },
 
     cssuglifier: {
-      options: {
-
-      },
+      options: {},
       files: {
-        src: 'test/fixtures/**/*.css',
-        dest: 'tmp/result'
+        src: 'src/**/*.css',
+        dest: 'dest'
       }
     }
   });

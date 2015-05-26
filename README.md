@@ -26,64 +26,140 @@ In your project's Gruntfile, add a section named `cssuglifier` to the data objec
 grunt.initConfig({
   cssuglifier: {
     options: {
-      // Task-specific options go here.
+      keepBemModifier: true,
+      bemModifierPrefix: '--',
+
+      createJsonMapFile: true,
+      jsonMapFilePath: 'cssuglifier_mapping.json',
+
+      createJSMapFile: 1,
+      jsMapFilePath: this.name + '_mapping.js',
+      jsMapVarDefinition: 'var cssuglifierMap'
     },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
+    files: {
+      src: '**/*.css',
+      dest: 'result'
+    }
   },
 });
 ```
 
 ### Options
 
-#### options.separator
+#### files.src
+Type: `String|Array`
+
+The path to the source files for uglification.
+You can define an array of files
+
+```
+...
+  files: {
+    src: ['src/a.css', 'src/b.css', 'src/c.css'],
+    ...
+  }
+...
+```
+
+or you can define as single file
+
+```
+...
+  files: {
+    src: 'src/foo.css',
+    ...
+  }
+...
+```
+
+or you can use globbing as well
+
+```
+...
+  files: {
+    src: 'src/**/*.css',
+    ...
+  }
+...
+```
+
+#### files.dest
 Type: `String`
-Default value: `',  '`
 
-A string value that is used to do something with whatever.
+The target for saving the uglified CSS files.
+If this is empty the source files will be *overwritten*.
+Subdirectories from the source folder will be preserved.
 
-#### options.punctuation
+
+#### options.keepBemModifier
+Type: `Bool`
+Default value: `true`
+
+This is for BEM class name usage but actually you can define any kind of suffix that will be preserved if found at the end of a class name.
+
+#### options.bemModifierPrefix
 Type: `String`
-Default value: `'.'`
+Default value: `'--'`
 
-A string value that is used to do something else with whatever else.
+Separator between the BEM modifier as described above and the actual class name.
+
+#### options.createJsonMapFile
+Type: `Bool`
+Default value: `true`
+
+This will create a JSON file that contains an object with the mapping of the transformed class names.
+The format is:
+```
+{
+  'actualLongClassName': 'ugly'
+}
+```
+
+#### options.jsonMapFilePath
+Type: `String`
+Default value: `'cssuglifier_mapping.json'`
+
+The path to the JSON file described above.
+
+#### options.createJSMapFile
+Type: `Boold`
+Default value: `true`
+
+Creates a '.js' file similar to the JSON file but the JSON object is wrapped by a variable assignment. This way the result file can be combined into an uglifyJS task or something similar.
+
+#### options.jsMapFilePath
+Type: `String`
+Default value: `'cssuglifier_mapping.js'`
+
+The path to the JS-file described above.
+
+#### options.jsMapVarDefinition
+Type: `String`
+Default value: `'var cssuglifierMap'`
+
+The result by default is:
+```
+var cssuglifierMap = {'actualLongClassName': 'ugly'};
+```
+
+You can also change this to an object property assignment.
+For example a change to `'myApp.cssMapping'` would result in:
+```
+myApp.cssMapping = {'actualLongClassName': 'ugly'};
+```
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
 
 ```js
 grunt.initConfig({
   cssuglifier: {
     options: {},
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+      src: 'src/**/*.css',
+      dest: 'dest'
+    }
   },
 });
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
-grunt.initConfig({
-  cssuglifier: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Release History
-_(Nothing yet)_

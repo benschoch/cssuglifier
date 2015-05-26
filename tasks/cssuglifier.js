@@ -22,11 +22,11 @@ module.exports = function (grunt) {
       bemModifierPrefix: '--',
 
       createJsonMapFile: true,
-      jsonMapFilePath: this.name + '_mapping.js',
+      jsonMapFilePath: this.name + '_mapping.json',
 
       createJSMapFile: 1,
       jsMapVarDefinition: 'var ' + this.name + 'Map',
-      jsMapFilePath: this.name + '_mapping.json'
+      jsMapFilePath: this.name + '_mapping.js'
     };
 
     // append config values from gruntfile
@@ -117,11 +117,11 @@ module.exports = function (grunt) {
       grunt.file.write(destFileName, result);
     });
 
-    if (options.createMapJson) {
+    if (options.createJsonMapFile) {
       grunt.file.write(options.jsonMapFilePath, JSON.stringify(mapped));
     }
 
-    if (options.createMapJS) {
+    if (options.createJSMapFile) {
       var jsContent = JSON.stringify(mapped);
       jsContent = jsContent.replace(/\s+/, '');
       jsContent = options.jsMapVarDefinition + ' = ' + jsContent + ';';

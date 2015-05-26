@@ -1,7 +1,48 @@
 # grunt-cssuglifier
 
-> This plugin minifies the CSS class names in a given CSS file.
-> Currently this is only working for
+> This plugin minifies the CSS class names in a given CSS file. Additionally a JSON mapping file and a JS mapping file can be created automatically for usage within other grunt tasks or other parts of you application.
+> By default this plugin preserves class name suffixes so it can be used for easier handling BEM style modifiers.
+
+> Example input:
+```css
+.block {
+    display: block;
+}
+
+.block--inactive {
+    display: none
+}
+
+.block__element {
+    display: none;
+    border: 1px solid #000;
+}
+
+.block__element--active {
+    border: 1px solid #f00;
+}
+```
+
+> Example output:
+```css
+.b5 {
+    display: block;
+}
+
+.b5--inactive {
+    display: none
+}
+
+.c28 {
+    display: none;
+    border: 1px solid #000;
+}
+
+.c28--active {
+    border: 1px solid #f00;
+}
+```
+
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`

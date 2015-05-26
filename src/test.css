@@ -1,0 +1,16 @@
+.block {
+    display: block;
+}
+
+.block--inactive {
+    display: none
+}
+
+.block__element {
+    display: none;
+    border: 1px solid #000;
+}
+
+.block__element--active {
+    border: 1px solid #f00;
+}

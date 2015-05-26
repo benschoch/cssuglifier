@@ -1,0 +1,47 @@
+/*
+ * grunt-cssuglifier
+ * https://github.com/benjaminschoch/cssuglifier
+ *
+ * Copyright (c) 2015 benjamin.schoch
+ * Licensed under the MIT license.
+ */
+
+'use strict';
+
+module.exports = function (grunt) {
+
+  // Project configuration.
+  grunt.initConfig({
+
+    clean: {
+      tests: ['tmp']
+    },
+
+    cssuglifier: {
+      options: {
+
+      },
+      files: {
+        src: 'test/fixtures/**/*.css',
+        dest: 'tmp/result'
+      }
+    }
+  });
+
+  // Actually load this plugin's task(s).
+  grunt.loadTasks('tasks');
+
+  // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-contrib-clean');
+
+  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
+  // plugin's task(s), then test the result.
+  grunt.registerTask('test', [
+    'clean',
+    'cssuglifier'
+  ]);
+
+  // By default, lint and run all tests.
+  grunt.registerTask('default', ['test']);
+
+};

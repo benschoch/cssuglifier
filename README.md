@@ -71,6 +71,7 @@ In your project's Gruntfile, add a section named `cssuglifier` to the data objec
 grunt.initConfig({
   cssuglifier: {
     options: {
+      classPrefix: '\\.',
       keepBemModifier: true,
       bemModifierPrefix: '--',
 

@@ -11,12 +11,12 @@
 var md5 = require('MD5');
 var path = require('path');
 var glob = require("glob");
+var Buffer = require('buffer').Buffer;
 
 module.exports = function (grunt) {
 
-  grunt.registerMultiTask('cssuglifier', 'The best Grunt plugin ever.', function () {
+  grunt.registerMultiTask('cssuglifier', 'CSS class name shortener', function () {
     var defaultOptions = {
-      classPrefixRegex: '\\.',
       classPrefix: '\\.',
       keepBemModifier: 1,
       bemModifierPrefix: '--',
@@ -89,7 +89,7 @@ module.exports = function (grunt) {
 
       var fileContent = grunt.file.read(src);
 
-      var regexStr = '(' + options.classPrefix + ')([^\\s,\\{\\[:\\d]+[^\\s,\\{\\[:]+)';
+      var regexStr = '(' + options.classPrefix + ')(-?[_a-zA-Z]+[_a-zA-Z0-9-]*)(?![^\\{]*\\})';
       var regex = new RegExp(regexStr, 'g');
       var result = fileContent.replace(regex, function (className, prefix) {
         className = sanitizeClassName(className);
@@ -115,6 +115,13 @@ module.exports = function (grunt) {
       var destFileName = options.files.dest[id];
 
       grunt.file.write(destFileName, result);
+
+      var fileSize = Buffer.byteLength(fileContent) / 1024;
+      var newFileSize = Buffer.byteLength(result) / 1024;
+      var savedKB = (fileSize - newFileSize);
+      var savedPercent = (savedKB / fileSize * 100);
+      var savedMessage = path.basename(destFileName) + ' -> saved ' + savedPercent.toFixed(2) + '% (from ' + fileSize.toFixed(2) + ' to ' + newFileSize.toFixed(2) + ' KB)';
+      grunt.log.oklns(savedMessage)
     });
 
     if (options.createJsonMapFile) {
@@ -145,7 +152,7 @@ module.exports = function (grunt) {
     var incomingName = name;
     var limitCrypt = 10;
     var actualStringLength = incomingName.length;
-    var maxStringLength = actualStringLength * 1.5;
+    var maxStringLength = actualStringLength * 1;
     var success = false;
     for (var i = 0; i < limitCrypt; i++) {
       for (var strLen = 2; strLen <= maxStringLength; strLen++) {

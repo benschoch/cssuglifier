@@ -31,15 +31,13 @@
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-nodeunit": "^0.3.3",
     "grunt": "~0.4.5",
-    "MD5": "~1.2.*",
-    "glob": "~5.*"
+    "MD5": "~1.2.*"
   },
   "peerDependencies": {
     "grunt": "~0.4.5",
-    "MD5": "~1.2.*",
-    "glob": "~5.*"
+    "MD5": "~1.2.*"
   },
   "keywords": [
-    "gruntplugin"
+    "css", "compress", "uglify", "minify", "anonymize"
   ]
 }

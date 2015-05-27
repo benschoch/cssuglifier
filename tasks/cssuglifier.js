@@ -116,7 +116,7 @@ module.exports = function (grunt) {
 
       var destFileName = options.files.dest[id];
 
-      destFileName = destFileName.replace(/^(.*)(\.\D+)$/, '$1'+options.fileNameSuffix+'$2');
+      destFileName = destFileName.replace(/^(.*)(\.\D+)$/, '$1' + options.fileNameSuffix + '$2');
 
       grunt.file.write(destFileName, result);
 
@@ -154,9 +154,9 @@ module.exports = function (grunt) {
 
   var uniqueAnonymizedName = function (name, alreadyMapped) {
     var incomingName = name;
-    var limitCrypt = 10;
+    var limitCrypt = 15;
     var actualStringLength = incomingName.length;
-    var maxStringLength = actualStringLength * 1;
+    var maxStringLength = Math.ceil(actualStringLength * .8);
     var success = false;
     for (var i = 0; i < limitCrypt; i++) {
       for (var strLen = 2; strLen <= maxStringLength; strLen++) {
@@ -166,10 +166,15 @@ module.exports = function (grunt) {
           break;
         }
         if (strLen === actualStringLength && !objectValueExists(incomingName, alreadyMapped)) {
+          grunt.log.warn('Sorry, was unable to find a short unique replacement for "' + incomingName + '"');
           name = incomingName;
           success = true;
           break;
         }
+      }
+
+      if (success) {
+        break;
       }
     }
 

@@ -1,16 +1,16 @@
-.b5 {
+.b4 {
     display: block;
 }
 
-.b5--inactive {
+.b4--inactive {
     display: none
 }
 
-.c28 {
+.c7 {
     display: none;
     border: 1px solid #000;
 }
 
-.c28--active {
+.c7--active {
     border: 1px solid #f00;
 }

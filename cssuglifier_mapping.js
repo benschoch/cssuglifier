@@ -1,1 +1,1 @@
-var cssuglifierMap = {"block":"b5","block__element":"c28"};
+var cssuglifierMap = {"block":"b4","block__element":"c7"};

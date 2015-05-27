@@ -18,9 +18,7 @@ module.exports = function (grunt) {
     },
 
     cssuglifier: {
-      options: {
-        jsonMapFilePath: 'dingens/js/cssuglified_map.json'
-      },
+      options: {},
       files: {
         src: 'src/**/*.css',
         dest: 'dest'

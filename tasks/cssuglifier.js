@@ -174,7 +174,7 @@ module.exports = function (grunt) {
     }
 
     if (!success) {
-      grunt.log.warn('Error during class name compression ("' + incomingName + '"). Maybe the file is too long?');
+      grunt.log.warn('Reached class name compression limit ("' + incomingName + '"). Maybe the file is too long?');
       name = incomingName;
     }
 

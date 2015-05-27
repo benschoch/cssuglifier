@@ -1,6 +1,6 @@
 # grunt-cssuglifier
 
-> This plugin minifies the CSS class names in a given CSS file. Additionally a JSON mapping file and a JS mapping file can be created automatically for usage within other grunt tasks or other parts of you application.
+> This plugin minifies the CSS class names in a given CSS file. Additionally a JSON mapping file and a JS mapping file can be created automatically for usage within other grunt tasks or other parts of your application.
 
 > By default this plugin preserves class name suffixes so it can be used for easier handling BEM style modifiers.
 

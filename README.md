@@ -80,7 +80,9 @@ grunt.initConfig({
 
       createJSMapFile: 1,
       jsMapFilePath: this.name + '_mapping.js',
-      jsMapVarDefinition: 'var cssuglifierMap'
+      jsMapVarDefinition: 'var cssuglifierMap',
+
+      fileNameSuffix: '.ugly'
     },
     files: {
       src: '**/*.css',
@@ -159,6 +161,13 @@ options: {
 }
 ...
 ```
+
+#### options.fileNameSuffix
+Type: `String`
+Default value: `'.ugly'`
+
+This suffix will be prepended to the actual file ending of you CSS files.
+So *styles.css* would result in *styles.ugly.css* by default.
 
 #### options.bemModifierPrefix
 Type: `String`

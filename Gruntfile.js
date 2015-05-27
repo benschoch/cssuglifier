@@ -14,11 +14,13 @@ module.exports = function (grunt) {
   grunt.initConfig({
 
     clean: {
-      tests: ['tmp']
+      tests: ['dest']
     },
 
     cssuglifier: {
-      options: {},
+      options: {
+        jsonMapFilePath: 'dingens/js/cssuglified_map.json'
+      },
       files: {
         src: 'src/**/*.css',
         dest: 'dest'

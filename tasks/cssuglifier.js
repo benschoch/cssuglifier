@@ -26,7 +26,9 @@ module.exports = function (grunt) {
 
       createJSMapFile: 1,
       jsMapVarDefinition: 'var ' + this.name + 'Map',
-      jsMapFilePath: this.name + '_mapping.js'
+      jsMapFilePath: this.name + '_mapping.js',
+
+      fileNameSuffix: '.ugly'
     };
 
     // append config values from gruntfile
@@ -113,6 +115,8 @@ module.exports = function (grunt) {
       });
 
       var destFileName = options.files.dest[id];
+
+      destFileName = destFileName.replace(/^(.*)(\.\D+)$/, '$1'+options.fileNameSuffix+'$2');
 
       grunt.file.write(destFileName, result);
 

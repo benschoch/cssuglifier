@@ -232,7 +232,7 @@ Default value: `'var cssuglifierMap'`
 
 Path to a JSON file that will be merged with the automatically created map files.
 So you can append class names that are not defined in the CSS source file(s).
-
+Please note that the definitions in this file will overwrite values within the auto-generated JSON map.
 
 ### Usage Examples
 

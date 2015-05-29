@@ -18,7 +18,8 @@ module.exports = function (grunt) {
     },
 
     cssuglifier: {
-      options: {},
+      options: {
+      },
       files: {
         src: 'src/**/*.css',
         dest: 'dest'

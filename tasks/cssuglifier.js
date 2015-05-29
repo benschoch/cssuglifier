@@ -28,6 +28,8 @@ module.exports = function (grunt) {
       jsMapVarDefinition: 'var ' + this.name + 'Map',
       jsMapFilePath: this.name + '_mapping.js',
 
+      additionalMapJson: '',
+
       fileNameSuffix: '.ugly'
     };
 
@@ -128,6 +130,8 @@ module.exports = function (grunt) {
       grunt.log.oklns(savedMessage)
     });
 
+    mapped = prepareJsonMap(mapped, options);
+
     if (options.createJsonMapFile) {
       grunt.file.write(options.jsonMapFilePath, JSON.stringify(mapped));
     }
@@ -140,6 +144,25 @@ module.exports = function (grunt) {
     }
 
   });
+
+  var prepareJsonMap = function (generatedMap, options) {
+    var src = options.additionalMapJson;
+    if (typeof src === "string" && src.length) {
+      if (!grunt.file.exists(src)) {
+        grunt.log.warn('Source file "' + src + '" not found.');
+      }
+
+      var fileContent = grunt.file.read(src);
+      var additionalMap = JSON.parse(fileContent);
+      for (var key in additionalMap) {
+        if (additionalMap.hasOwnProperty(key)) {
+          generatedMap[key] = additionalMap[key];
+        }
+      }
+    }
+
+    return generatedMap;
+  };
 
   var anonymizeName = function (name, strLen) {
     name = md5(name);

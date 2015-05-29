@@ -82,6 +82,8 @@ grunt.initConfig({
       jsMapFilePath: this.name + '_mapping.js',
       jsMapVarDefinition: 'var cssuglifierMap',
 
+      additionalMapJson: ''
+
       fileNameSuffix: '.ugly'
     },
     files: {
@@ -135,8 +137,8 @@ or you can use globbing as well
 Type: `String`
 
 The target for saving the uglified CSS files.
-If this is empty the source files will be *overwritten*.
 Subdirectories from the source folder will be preserved.
+If this value **and** the value of `options.fileNameSuffix` are empty, the source files will be **overwritten**.
 
 #### options.keepBemModifier
 Type: `Bool`
@@ -149,7 +151,7 @@ Type: `String`
 Default value: `'\\.'`
 
 If you prefer to use the script for something else than classes (for example IDs) this is what you have to change.
-Please note the *double* backslash in front of the dot in the default value. As this string will be passed to RegExp, it has to be escaped.
+Please note the **double** backslash in front of the dot in the default value. As this string will be passed to RegExp, it has to be escaped.
 
 An example usage to replace class names & IDs:
 ```
@@ -168,6 +170,7 @@ Default value: `'.ugly'`
 
 This suffix will be prepended to the actual file ending of you CSS files.
 So *styles.css* would result in *styles.ugly.css* by default.
+If this value **and** the value of `files.dest` are empty, the source files will be **overwritten**.
 
 #### options.bemModifierPrefix
 Type: `String`
@@ -182,13 +185,12 @@ Default value: `true`
 This will create a JSON file that contains an object with the mapping of the transformed class names.
 The format is:
 ```
-...
-options: {
+{
   ...
-  'actualLongClassName': 'ugly'
+  'actualLongClassName': 'ugly',
+  'anpotherLongClassName': 'uygl'
   ...
 }
-...
 ```
 
 #### options.jsonMapFilePath
@@ -223,6 +225,14 @@ For example a change to `'myApp.cssMapping'` would result in:
 ```
 myApp.cssMapping = {'actualLongClassName': 'ugly'};
 ```
+
+#### options.additionalMapJson
+Type: `String`
+Default value: `'var cssuglifierMap'`
+
+Path to a JSON file that will be merged with the automatically created map files.
+So you can append class names that are not defined in the CSS source file(s).
+
 
 ### Usage Examples
 

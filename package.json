@@ -26,20 +26,23 @@
   "scripts": {
     "test": "grunt test"
   },
+  "dependencies": {
+    "grunt": "~0.4.5",
+    "MD5": "~1.2.*",
+    "glob": "~5.*",
+    "get_css_from_js": "*"
+  },
   "devDependencies": {
     "grunt-contrib-jshint": "^0.9.2",
     "grunt-contrib-clean": "^0.5.0",
-    "grunt-contrib-nodeunit": "^0.3.3",
-    "grunt": "~0.4.5",
-    "MD5": "~1.2.*",
-    "glob": "~5.*"
-  },
-  "peerDependencies": {
-    "grunt": "~0.4.5",
-    "MD5": "~1.2.*",
-    "glob": "~5.*"
+    "grunt-contrib-nodeunit": "^0.3.3"
   },
   "keywords": [
-    "css", "compress", "uglify", "minify", "anonymize", "BEM"
+    "css",
+    "compress",
+    "uglify",
+    "minify",
+    "anonymize",
+    "BEM"
   ]
 }

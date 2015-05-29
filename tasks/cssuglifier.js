@@ -11,6 +11,7 @@
 var md5 = require('MD5');
 var path = require('path');
 var glob = require("glob");
+var getCssFromJs = require('get_css_from_js');
 var Buffer = require('buffer').Buffer;
 
 module.exports = function (grunt) {
@@ -118,20 +119,43 @@ module.exports = function (grunt) {
           anonymizedClassName = prefix + anonymizedClassName + suffix;
           return anonymizedClassName;
         });
+
+        var destFileName = options.files.dest[id];
+
+        destFileName = destFileName.replace(/^(.*)(\.\D+)$/, '$1' + options.fileNameSuffix + '$2');
+
+        grunt.file.write(destFileName, result);
+
+        var fileSize = Buffer.byteLength(fileContent) / 1024;
+        var newFileSize = Buffer.byteLength(result) / 1024;
+        var savedKB = (fileSize - newFileSize);
+        var savedPercent = (savedKB / fileSize * 100);
+        var savedMessage = path.basename(destFileName) + ' -> saved ' + savedPercent.toFixed(2) + '% (from ' + fileSize.toFixed(2) + ' to ' + newFileSize.toFixed(2) + ' KB)';
+        grunt.log.oklns(savedMessage)
       }
 
-      var destFileName = options.files.dest[id];
-
-      destFileName = destFileName.replace(/^(.*)(\.\D+)$/, '$1' + options.fileNameSuffix + '$2');
-
-      grunt.file.write(destFileName, result);
-
-      var fileSize = Buffer.byteLength(fileContent) / 1024;
-      var newFileSize = Buffer.byteLength(result) / 1024;
-      var savedKB = (fileSize - newFileSize);
-      var savedPercent = (savedKB / fileSize * 100);
-      var savedMessage = path.basename(destFileName) + ' -> saved ' + savedPercent.toFixed(2) + '% (from ' + fileSize.toFixed(2) + ' to ' + newFileSize.toFixed(2) + ' KB)';
-      grunt.log.oklns(savedMessage)
+      /** parse JS file */
+      if (src.match(/.*\.js/)) {
+        var classNamesFromJS = getCssFromJs(src);
+        for(var c = 0; c < classNamesFromJS.length; c++){
+          var className = sanitizeClassName(classNamesFromJS[c]);
+          var suffix = '';
+          if (options.keepBemModifier && className.indexOf(options.bemModifierPrefix)) {
+            var classNameParts = className.split(options.bemModifierPrefix);
+            if (classNameParts.length === 2) {
+              className = classNameParts[0];
+              suffix = '--' + classNameParts[1];
+            }
+          }
+          var anonymizedClassName = '__ERROR__';
+          if (mapped.hasOwnProperty(className)) {
+            anonymizedClassName = mapped[className];
+          } else {
+            anonymizedClassName = uniqueAnonymizedName(className, mapped);
+            mapped[className] = anonymizedClassName;
+          }
+        }
+      }
     });
 
     mapped = appendJsonMap(mapped, options);

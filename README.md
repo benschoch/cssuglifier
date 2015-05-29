@@ -133,6 +133,10 @@ or you can use globbing as well
 ...
 ```
 
+Your can also add JS files here, but please note that those files are only used for the map file generation.
+So the classes found within JS files will not be merged into the CSS file.
+
+
 #### files.dest
 Type: `String`
 

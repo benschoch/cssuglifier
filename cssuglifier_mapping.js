@@ -1,1 +1,1 @@
-var cssuglifierMap = {"block":"b4","block__element":"c7"};
+var cssuglifierMap = {"block":"b4","block__element":"c7","mixedClass":"b3","oviousClass":"ib","subClass":"g0","b__el":"fa","find":"ea","isClass":"e2","hasClassCall":"h7","addClassCall":"ie","toggleClassCall":"ee","toggleClassMultiCall":"a7"};

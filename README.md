@@ -72,22 +72,23 @@ grunt.initConfig({
   cssuglifier: {
     options: {
       classPrefix: '\\.',
-      keepBemModifier: true,
+      keepBemModifier: 1,
       bemModifierPrefix: '--',
-
+      
       createJsonMapFile: true,
-      jsonMapFilePath: 'cssuglifier_mapping.json',
-
+      jsonMapFilePath: this.name + '_mapping.json',
+      
       createJSMapFile: 1,
+      jsMapVarDefinition: 'var ' + this.name + 'Map',
       jsMapFilePath: this.name + '_mapping.js',
-      jsMapVarDefinition: 'var cssuglifierMap',
-
-      additionalMapJson: ''
-
+      
+      prependMapJson: '',
+      appendMapJson: '',
+      
       fileNameSuffix: '.ugly'
     },
     files: {
-      src: '**/*.css',
+      src: 'src/**/*',
       dest: 'result'
     }
   },
@@ -253,7 +254,7 @@ grunt.initConfig({
   cssuglifier: {
     options: {},
     files: {
-      src: 'src/**/*.css',
+      src: 'src/**/*',
       dest: 'dest'
     }
   },

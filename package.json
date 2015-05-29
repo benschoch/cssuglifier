@@ -1,7 +1,7 @@
 {
   "name": "grunt-cssuglifier",
   "description": "Compress CSS class names & IDs to minify your file size.",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "homepage": "https://github.com/gstoert/cssuglifier",
   "author": {
     "name": "benjamin.schoch",

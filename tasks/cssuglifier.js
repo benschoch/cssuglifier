@@ -28,7 +28,8 @@ module.exports = function (grunt) {
       jsMapVarDefinition: 'var ' + this.name + 'Map',
       jsMapFilePath: this.name + '_mapping.js',
 
-      additionalMapJson: '',
+      prependMapJson: '',
+      appendMapJson: '',
 
       fileNameSuffix: '.ugly'
     };
@@ -83,7 +84,7 @@ module.exports = function (grunt) {
       return false;
     }
 
-    var mapped = {};
+    var mapped = prepareJsonMap(options);
 
     srcFiles.forEach(function (src, id) {
       if (!grunt.file.exists(src)) {
@@ -133,7 +134,8 @@ module.exports = function (grunt) {
       grunt.log.oklns(savedMessage)
     });
 
-    mapped = prepareJsonMap(mapped, options);
+    mapped = appendJsonMap(mapped, options);
+
     var jsContent = JSON.stringify(mapped);
     jsContent = jsContent.replace(/\s+/, '');
 
@@ -148,8 +150,26 @@ module.exports = function (grunt) {
 
   });
 
-  var prepareJsonMap = function (generatedMap, options) {
-    var src = options.additionalMapJson;
+  var prepareJsonMap = function (options) {
+    var map = {};
+    if (typeof options.prependMapJson === "string" && options.prependMapJson.length) {
+      if (!grunt.file.exists(options.prependMapJson)) {
+        grunt.log.warn('Source file "' + options.prependMapJson + '" not found.');
+      }
+
+      var additionalMap = grunt.file.readJSON(options.prependMapJson);
+      for (var key in additionalMap) {
+        if (additionalMap.hasOwnProperty(key)) {
+          map[key] = additionalMap[key];
+        }
+      }
+    }
+
+    return map;
+  };
+
+  var appendJsonMap = function (generatedMap, options) {
+    var src = options.appendMapJson;
     if (typeof src === "string" && src.length) {
       if (!grunt.file.exists(src)) {
         grunt.log.warn('Source file "' + src + '" not found.');

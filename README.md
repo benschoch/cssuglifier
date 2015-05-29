@@ -226,13 +226,20 @@ For example a change to `'myApp.cssMapping'` would result in:
 myApp.cssMapping = {'actualLongClassName': 'ugly'};
 ```
 
-#### options.additionalMapJson
+#### options.prependMapJson
 Type: `String`
-Default value: `'var cssuglifierMap'`
+Default value: `''`
 
 Path to a JSON file that will be merged with the automatically created map files.
 So you can append class names that are not defined in the CSS source file(s).
-Please note that the definitions in this file will overwrite values within the auto-generated JSON map.
+Please note that the the auto-generated JSON map overwrites existing values within this map file.
+
+
+#### options.appendMapJson
+Type: `String`
+Default value: `''`
+
+Similar to `options.prependMapJson` but overwrites existing values of the auto-generated JSON map.
 
 ### Usage Examples
 

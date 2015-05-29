@@ -19,6 +19,7 @@ module.exports = function (grunt) {
 
     cssuglifier: {
       options: {
+        addJQueryPluginToJS: 1
       },
       files: {
         src: 'src/**/*.css',

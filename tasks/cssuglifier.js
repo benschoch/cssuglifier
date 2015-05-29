@@ -93,28 +93,31 @@ module.exports = function (grunt) {
 
       var fileContent = grunt.file.read(src);
 
-      var regexStr = '(' + options.classPrefix + ')(-?[_a-zA-Z]+[_a-zA-Z0-9-]*)(?![^\\{]*\\})';
-      var regex = new RegExp(regexStr, 'g');
-      var result = fileContent.replace(regex, function (className, prefix) {
-        className = sanitizeClassName(className);
-        var suffix = '';
-        if (options.keepBemModifier && className.indexOf(options.bemModifierPrefix)) {
-          var classNameParts = className.split(options.bemModifierPrefix);
-          if (classNameParts.length === 2) {
-            className = classNameParts[0];
-            suffix = '--' + classNameParts[1];
+      /** parse CSS file */
+      if (src.match(/.*\.css$/)) {
+        var regexStr = '(' + options.classPrefix + ')(-?[_a-zA-Z]+[_a-zA-Z0-9-]*)(?![^\\{]*\\})';
+        var regex = new RegExp(regexStr, 'g');
+        var result = fileContent.replace(regex, function (className, prefix) {
+          className = sanitizeClassName(className);
+          var suffix = '';
+          if (options.keepBemModifier && className.indexOf(options.bemModifierPrefix)) {
+            var classNameParts = className.split(options.bemModifierPrefix);
+            if (classNameParts.length === 2) {
+              className = classNameParts[0];
+              suffix = '--' + classNameParts[1];
+            }
           }
-        }
-        var anonymizedClassName = '__ERROR__';
-        if (mapped.hasOwnProperty(className)) {
-          anonymizedClassName = mapped[className];
-        } else {
-          anonymizedClassName = uniqueAnonymizedName(className, mapped);
-          mapped[className] = anonymizedClassName;
-        }
-        anonymizedClassName = prefix + anonymizedClassName + suffix;
-        return anonymizedClassName;
-      });
+          var anonymizedClassName = '__ERROR__';
+          if (mapped.hasOwnProperty(className)) {
+            anonymizedClassName = mapped[className];
+          } else {
+            anonymizedClassName = uniqueAnonymizedName(className, mapped);
+            mapped[className] = anonymizedClassName;
+          }
+          anonymizedClassName = prefix + anonymizedClassName + suffix;
+          return anonymizedClassName;
+        });
+      }
 
       var destFileName = options.files.dest[id];
 
@@ -131,14 +134,14 @@ module.exports = function (grunt) {
     });
 
     mapped = prepareJsonMap(mapped, options);
+    var jsContent = JSON.stringify(mapped);
+    jsContent = jsContent.replace(/\s+/, '');
 
     if (options.createJsonMapFile) {
-      grunt.file.write(options.jsonMapFilePath, JSON.stringify(mapped));
+      grunt.file.write(options.jsonMapFilePath, jsContent);
     }
 
     if (options.createJSMapFile) {
-      var jsContent = JSON.stringify(mapped);
-      jsContent = jsContent.replace(/\s+/, '');
       jsContent = options.jsMapVarDefinition + ' = ' + jsContent + ';';
       grunt.file.write(options.jsMapFilePath, jsContent);
     }
@@ -152,8 +155,7 @@ module.exports = function (grunt) {
         grunt.log.warn('Source file "' + src + '" not found.');
       }
 
-      var fileContent = grunt.file.read(src);
-      var additionalMap = JSON.parse(fileContent);
+      var additionalMap = grunt.file.readJSON(src);
       for (var key in additionalMap) {
         if (additionalMap.hasOwnProperty(key)) {
           generatedMap[key] = additionalMap[key];

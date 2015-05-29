@@ -86,6 +86,8 @@ module.exports = function (grunt) {
     }
 
     var mapped = prepareJsonMap(options);
+    var fileSizeTotal = 0;
+    var newFileSizeTotal = 0;
 
     srcFiles.forEach(function (src, id) {
       if (!grunt.file.exists(src)) {
@@ -127,7 +129,9 @@ module.exports = function (grunt) {
         grunt.file.write(destFileName, result);
 
         var fileSize = Buffer.byteLength(fileContent) / 1024;
+        fileSizeTotal += fileSize;
         var newFileSize = Buffer.byteLength(result) / 1024;
+        newFileSizeTotal += newFileSize;
         var savedKB = (fileSize - newFileSize);
         var savedPercent = (savedKB / fileSize * 100);
         var savedMessage = path.basename(destFileName) + ' -> saved ' + savedPercent.toFixed(2) + '% (from ' + fileSize.toFixed(2) + ' to ' + newFileSize.toFixed(2) + ' KB)';
@@ -137,7 +141,7 @@ module.exports = function (grunt) {
       /** parse JS file */
       if (src.match(/.*\.js/)) {
         var classNamesFromJS = getCssFromJs(src);
-        for(var c = 0; c < classNamesFromJS.length; c++){
+        for (var c = 0; c < classNamesFromJS.length; c++) {
           var className = sanitizeClassName(classNamesFromJS[c]);
           var suffix = '';
           if (options.keepBemModifier && className.indexOf(options.bemModifierPrefix)) {
@@ -171,6 +175,13 @@ module.exports = function (grunt) {
       jsContent = options.jsMapVarDefinition + ' = ' + jsContent + ';';
       grunt.file.write(options.jsMapFilePath, jsContent);
     }
+
+    grunt.log.oklns('---------------------------------------------------');
+
+    var savedKB = (fileSizeTotal - newFileSizeTotal);
+    var savedPercent = (savedKB / fileSizeTotal * 100);
+    var savedMessage = 'CSS uglification: saved ' + savedPercent.toFixed(2) + '% (' + savedKB.toFixed(2) + ' KB)';
+    grunt.log.oklns(savedMessage)
 
   });
 
@@ -223,7 +234,7 @@ module.exports = function (grunt) {
 
   var uniqueAnonymizedName = function (name, alreadyMapped) {
     var incomingName = name;
-    var limitCrypt = 15;
+    var limitCrypt = 30;
     var actualStringLength = incomingName.length;
     var maxStringLength = Math.ceil(actualStringLength * .8);
     var success = false;
@@ -235,7 +246,6 @@ module.exports = function (grunt) {
           break;
         }
         if (strLen === actualStringLength && !objectValueExists(incomingName, alreadyMapped)) {
-          grunt.log.warn('Sorry, was unable to find a short unique replacement for "' + incomingName + '"');
           name = incomingName;
           success = true;
           break;
@@ -248,7 +258,6 @@ module.exports = function (grunt) {
     }
 
     if (!success) {
-      grunt.log.warn('Reached class name compression limit ("' + incomingName + '"). Maybe the file is too long?');
       name = incomingName;
     }
 
